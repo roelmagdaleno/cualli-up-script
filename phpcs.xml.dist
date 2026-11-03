@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<ruleset name="Cualli Link Monitor">
+	<description>WordPress Coding Standards for the Cualli Link Monitor mu-plugin.</description>
+
+	<file>cualli-link-monitor.php</file>
+	<file>cualli-link-monitor/src</file>
+
+	<arg name="extensions" value="php"/>
+	<arg name="colors"/>
+	<arg value="sp"/>
+
+	<config name="minimum_wp_version" value="6.4"/>
+
+	<rule ref="WordPress"/>
+
+	<!-- Classes follow PSR-4 (src/Scan/ScanRunner.php), not class-scan-runner.php. -->
+	<rule ref="WordPress.Files.FileName">
+		<exclude-pattern>cualli-link-monitor/src/*</exclude-pattern>
+	</rule>
+
+	<rule ref="WordPress.NamingConventions.PrefixAllGlobals">
+		<properties>
+			<property name="prefixes" type="array">
+				<element value="cualli_link_monitor"/>
+				<element value="Cualli\LinkMonitor"/>
+			</property>
+		</properties>
+	</rule>
+</ruleset>
