@@ -21,7 +21,7 @@ final class Config {
 
 	private const DEFAULT_RECIPIENTS = array( 'roelmagdaleno@gmail.com' );
 
-	private const DEFAULT_FROM = 'Cualli Link Monitor <onboarding@resend.dev>';
+	private const DEFAULT_FROM = 'Cualli Link Monitor <sistemas@cualli.mx>';
 
 	private const RESEND_API_KEY_CONSTANT = 'CUALLI_LINK_MONITOR_RESEND_API_KEY';
 
