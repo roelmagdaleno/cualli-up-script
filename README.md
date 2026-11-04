@@ -48,7 +48,7 @@ No hay pantalla de ajustes. Cada valor tiene un default en `src/Config.php` y un
 
 | Filtro | Default |
 |---|---|
-| `cualli_link_monitor_recipients` | `['roelmagdaleno@gmail.com']` |
+| `cualli_link_monitor_recipients` | `['roelmagdaleno@gmail.com', 'satoshi.garibay@zentinela.com', 'sistemas@cualli.mx']` |
 | `cualli_link_monitor_email_from` | `'Cualli Link Monitor <onboarding@resend.dev>'` |
 | `cualli_link_monitor_resend_api_key` | Valor de la constante `CUALLI_LINK_MONITOR_RESEND_API_KEY` |
 | `cualli_link_monitor_scan_weekday` | `'monday'` |

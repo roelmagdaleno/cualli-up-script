@@ -19,7 +19,7 @@ final class Config {
 
 	public const BATCH_HOOK = 'cualli_link_monitor_process_batch';
 
-	private const DEFAULT_RECIPIENTS = array( 'roelmagdaleno@gmail.com' );
+	private const DEFAULT_RECIPIENTS = array( 'roelmagdaleno@gmail.com', 'satoshi.garibay@zentinela.com', 'sistemas@cualli.mx' );
 
 	private const DEFAULT_FROM = 'Cualli Link Monitor <sistemas@cualli.mx>';
 
