@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: Cualli - Link Monitor
- * Description: Escanea cada semana los enlaces internos, imágenes, CSS y JS del sitio y envía un correo si encuentra recursos rotos.
+ * Description: Escanea cada semana los enlaces internos, imágenes, CSS y JS del sitio y envía un correo con el resultado.
  * Version:     1.0.0
  * Author:      Cualli
  * Requires PHP: 8.2

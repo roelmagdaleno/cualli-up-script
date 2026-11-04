@@ -1,12 +1,12 @@
 # Cualli - Link Monitor
 
-Mu-plugin de WordPress que cada **lunes a las 3:00 AM (hora de la Ciudad de México)** escanea cualli.mx y envía un correo si encuentra recursos rotos:
+Mu-plugin de WordPress que cada **lunes a las 3:00 AM (hora de la Ciudad de México)** escanea cualli.mx y envía un correo con el resultado, aunque no encuentre recursos rotos. Revisa:
 
 - Enlaces internos (`<a href>` del mismo dominio)
 - Imágenes (`<img src>`, `srcset`, `<source srcset>`)
 - Hojas de estilo (`<link rel="stylesheet">`) y scripts (`<script src>`) internos
 
-Los enlaces externos no se revisan. Si no hay errores, no se envía nada.
+Los enlaces externos no se revisan. Si no hay errores, el asunto del correo es `[Sitio] Escaneo de enlaces sin errores`.
 
 ## Instalación
 
@@ -34,10 +34,10 @@ Sin esta constante el reporte no se envía: el error queda en el log de PHP y `w
 ## Comandos WP-CLI
 
 ```bash
-wp cualli-links scan --no-email          # Escanea ahora y muestra el reporte, sin enviar correo
-wp cualli-links scan --notify-when-clean # Escanea y envía el correo aunque no haya errores
-wp cualli-links status                   # Próximo escaneo y resumen del último
-wp cualli-links reschedule               # Vuelve a programar el evento semanal
+wp cualli-links scan            # Escanea ahora y envía el correo del reporte
+wp cualli-links scan --no-email # Escanea ahora y muestra el reporte, sin enviar correo
+wp cualli-links status          # Próximo escaneo y resumen del último
+wp cualli-links reschedule      # Vuelve a programar el evento semanal
 ```
 
 `wp cron event run cualli_link_monitor_weekly_scan` recorre el evento semanal a la hora en que se ejecuta. Después de usarlo, corre `wp cualli-links reschedule`.
@@ -49,7 +49,6 @@ No hay pantalla de ajustes. Cada valor tiene un default en `src/Config.php` y un
 | Filtro | Default |
 |---|---|
 | `cualli_link_monitor_recipients` | `['roelmagdaleno@gmail.com']` |
-| `cualli_link_monitor_notify_when_clean` | `false` |
 | `cualli_link_monitor_email_from` | `'Cualli Link Monitor <onboarding@resend.dev>'` |
 | `cualli_link_monitor_resend_api_key` | Valor de la constante `CUALLI_LINK_MONITOR_RESEND_API_KEY` |
 | `cualli_link_monitor_scan_weekday` | `'monday'` |
@@ -95,7 +94,7 @@ Scan/ScanState             Avance del escaneo (solo arrays, se guarda en una opc
 Scan/ScanStateRepository   Lee y guarda estado y resumen
 Scan/BatchDispatcher       Programa el siguiente lote
 Report/ReportBuilder       Texto del correo
-Report/ReportMailer        Decide si se envía el correo y registra los fallos
+Report/ReportMailer        Envía el reporte y registra los fallos
 Report/ResendClient        Envía el correo con la API de Resend
 Cli/LinkMonitorCommand     wp cualli-links
 Model/*                    Objetos de valor (Reference, ReferenceType, CheckResult…)

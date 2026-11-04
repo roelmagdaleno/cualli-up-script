@@ -1,6 +1,6 @@
 {
 	"name": "cualli/link-monitor",
-	"description": "Weekly scan of internal links, images, CSS and JS for cualli.mx, with an email alert when something is broken.",
+	"description": "Weekly scan of internal links, images, CSS and JS for cualli.mx, with an email report after every scan.",
 	"type": "wordpress-muplugin",
 	"license": "proprietary",
 	"require": {

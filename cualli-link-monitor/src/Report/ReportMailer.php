@@ -13,7 +13,7 @@ use Cualli\LinkMonitor\Scan\ScanResult;
 /**
  * Emails the report through Resend, and makes a failed delivery visible.
  *
- * By default the email goes out only when the scan finds broken references.
+ * The email goes out after every scan, also when it finds no broken references.
  */
 final class ReportMailer {
 
@@ -32,7 +32,7 @@ final class ReportMailer {
 	}
 
 	/**
-	 * Sends the report when there is something to report and someone to send it to.
+	 * Sends the report when there is someone to send it to.
 	 *
 	 * @param ScanResult $result Result of the scan.
 	 *
@@ -41,7 +41,7 @@ final class ReportMailer {
 	public function send( ScanResult $result ): bool {
 		$recipients = $this->config->recipients();
 
-		if ( array() === $recipients || ! $this->should_notify( $result ) ) {
+		if ( array() === $recipients ) {
 			return false;
 		}
 
@@ -66,14 +66,5 @@ final class ReportMailer {
 		error_log( 'Cualli Link Monitor: no se pudo enviar el reporte. ' . $message ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log -- Cron has no other output.
 
 		do_action( 'cualli_link_monitor_report_failed', $message );
-	}
-
-	/**
-	 * Whether the scan result is worth an email.
-	 *
-	 * @param ScanResult $result Result of the scan.
-	 */
-	private function should_notify( ScanResult $result ): bool {
-		return $result->summary->broken_references > 0 || $this->config->notify_when_clean();
 	}
 }

@@ -43,14 +43,11 @@ final class LinkMonitorCommand {
 	 * default: true
 	 * ---
 	 *
-	 * [--notify-when-clean]
-	 * : Envía el correo aunque no haya recursos rotos.
-	 *
 	 * @param string[]             $args       Positional arguments (unused).
 	 * @param array<string, mixed> $assoc_args Flags.
 	 */
 	public function scan( array $args, array $assoc_args ): void {
-		$this->apply_email_flags( $assoc_args );
+		$this->apply_email_flag( $assoc_args );
 		$this->print_email_outcome();
 
 		$result = $this->services->scan_runner()->run_now(
@@ -95,17 +92,13 @@ final class LinkMonitorCommand {
 	}
 
 	/**
-	 * Applies `--no-email` and `--notify-when-clean` through the plugin filters.
+	 * Applies `--no-email` through the recipients filter.
 	 *
 	 * @param array<string, mixed> $assoc_args Flags.
 	 */
-	private function apply_email_flags( array $assoc_args ): void {
+	private function apply_email_flag( array $assoc_args ): void {
 		if ( ! \WP_CLI\Utils\get_flag_value( $assoc_args, 'email', true ) ) {
 			add_filter( 'cualli_link_monitor_recipients', '__return_empty_array' );
-		}
-
-		if ( \WP_CLI\Utils\get_flag_value( $assoc_args, 'notify-when-clean', false ) ) {
-			add_filter( 'cualli_link_monitor_notify_when_clean', '__return_true' );
 		}
 	}
 

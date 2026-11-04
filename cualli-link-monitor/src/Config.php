@@ -69,13 +69,6 @@ final class Config {
 	}
 
 	/**
-	 * Whether to send the report when the scan finds no broken references.
-	 */
-	public function notify_when_clean(): bool {
-		return (bool) apply_filters( 'cualli_link_monitor_notify_when_clean', false );
-	}
-
-	/**
 	 * Day of the week of the weekly scan, in English (as `strtotime()` reads it).
 	 */
 	public function scan_weekday(): string {
