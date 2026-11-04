@@ -21,6 +21,10 @@ final class Config {
 
 	private const DEFAULT_RECIPIENTS = array( 'roelmagdaleno@gmail.com' );
 
+	private const DEFAULT_FROM = 'Cualli Link Monitor <onboarding@resend.dev>';
+
+	private const RESEND_API_KEY_CONSTANT = 'CUALLI_LINK_MONITOR_RESEND_API_KEY';
+
 	private const DEFAULT_POST_TYPES = array( 'page', 'post' );
 
 	private const DEFAULT_TAXONOMIES = array( 'category', 'post_tag' );
@@ -43,6 +47,25 @@ final class Config {
 	 */
 	public function recipients(): array {
 		return (array) apply_filters( 'cualli_link_monitor_recipients', self::DEFAULT_RECIPIENTS );
+	}
+
+	/**
+	 * Sender of the report.
+	 *
+	 * The default works without a verified domain, but Resend then delivers
+	 * only to the email address of the Resend account.
+	 */
+	public function email_from(): string {
+		return (string) apply_filters( 'cualli_link_monitor_email_from', self::DEFAULT_FROM );
+	}
+
+	/**
+	 * Resend API key, from a constant in `wp-config.php` so it stays out of the repository.
+	 */
+	public function resend_api_key(): string {
+		$api_key = defined( self::RESEND_API_KEY_CONSTANT ) ? constant( self::RESEND_API_KEY_CONSTANT ) : '';
+
+		return (string) apply_filters( 'cualli_link_monitor_resend_api_key', $api_key );
 	}
 
 	/**

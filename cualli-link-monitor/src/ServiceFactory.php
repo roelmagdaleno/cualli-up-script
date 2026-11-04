@@ -14,6 +14,7 @@ use Cualli\LinkMonitor\Html\UrlNormalizer;
 use Cualli\LinkMonitor\Http\HttpClient;
 use Cualli\LinkMonitor\Report\ReportBuilder;
 use Cualli\LinkMonitor\Report\ReportMailer;
+use Cualli\LinkMonitor\Report\ResendClient;
 use Cualli\LinkMonitor\Scan\BatchDispatcher;
 use Cualli\LinkMonitor\Scan\PageScanner;
 use Cualli\LinkMonitor\Scan\ScanRunner;
@@ -83,7 +84,7 @@ final class ServiceFactory {
 			new PageScanner( $http_client, $extractor ),
 			$this->scan_state_repository(),
 			new BatchDispatcher(),
-			new ReportMailer( $config, $this->report_builder() )
+			new ReportMailer( $config, $this->report_builder(), new ResendClient( $config ) )
 		);
 	}
 

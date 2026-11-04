@@ -19,6 +19,16 @@ cualli-link-monitor/         ← código
 
 No hay que activar nada. En la siguiente petición al sitio, el plugin programa el evento semanal.
 
+Agrega la API key de Resend a `wp-config.php` (usa una key con permiso `sending_access`):
+
+```php
+define( 'CUALLI_LINK_MONITOR_RESEND_API_KEY', 're_...' );
+```
+
+Sin esta constante el reporte no se envía: el error queda en el log de PHP y `wp cualli-links scan` lo muestra.
+
+**Remitente:** el default, `onboarding@resend.dev`, no requiere verificar un dominio, pero Resend lo describe como de prueba y solo entrega al correo de la cuenta de Resend. Para otros destinatarios, verifica en Resend un dominio con acceso a su DNS y cambia `cualli_link_monitor_email_from`.
+
 **Recomendado en Kinsta:** pedir a soporte que active el cron del servidor (cada 5 o 15 minutos). WP-Cron solo corre cuando alguien visita el sitio, y a las 3 AM puede haber pocas visitas. Sin cron del servidor, el escaneo empieza con la primera visita después de esa hora.
 
 ## Comandos WP-CLI
@@ -40,6 +50,8 @@ No hay pantalla de ajustes. Cada valor tiene un default en `src/Config.php` y un
 |---|---|
 | `cualli_link_monitor_recipients` | `['roelmagdaleno@gmail.com']` |
 | `cualli_link_monitor_notify_when_clean` | `false` |
+| `cualli_link_monitor_email_from` | `'Cualli Link Monitor <onboarding@resend.dev>'` |
+| `cualli_link_monitor_resend_api_key` | Valor de la constante `CUALLI_LINK_MONITOR_RESEND_API_KEY` |
 | `cualli_link_monitor_scan_weekday` | `'monday'` |
 | `cualli_link_monitor_scan_time` | `'03:00'` (zona horaria del sitio) |
 | `cualli_link_monitor_batch_time_budget` | `120` segundos por lote |
@@ -60,7 +72,7 @@ Si cambias el día o la hora, corre `wp cualli-links reschedule`.
 
 1. **Lunes 3:00 AM:** el evento `cualli_link_monitor_weekly_scan` arma la lista de páginas con funciones de WordPress: home, entradas publicadas sin contraseña y archivos de términos.
 2. **Lotes:** cada lote descarga páginas hasta agotar su tiempo (120 s). Revisa cada URL interna una sola vez con `HEAD` (o `GET` parcial si el servidor no acepta `HEAD`) y guarda el avance en la opción `cualli_link_monitor_scan_state`.
-3. **Siguiente lote:** si quedan páginas, programa `cualli_link_monitor_process_batch`. Si no, guarda el resumen en `cualli_link_monitor_last_summary` y envía el correo.
+3. **Siguiente lote:** si quedan páginas, programa `cualli_link_monitor_process_batch`. Si no, guarda el resumen en `cualli_link_monitor_last_summary` y envía el correo con la API de Resend.
 
 Un timeout o un error 5xx se reintenta una vez después de 3 s, para evitar falsas alarmas por fallas momentáneas. Una URL se considera rota con un código 4xx/5xx o sin respuesta.
 
@@ -83,7 +95,8 @@ Scan/ScanState             Avance del escaneo (solo arrays, se guarda en una opc
 Scan/ScanStateRepository   Lee y guarda estado y resumen
 Scan/BatchDispatcher       Programa el siguiente lote
 Report/ReportBuilder       Texto del correo
-Report/ReportMailer        Envía el correo con wp_mail()
+Report/ReportMailer        Decide si se envía el correo y registra los fallos
+Report/ResendClient        Envía el correo con la API de Resend
 Cli/LinkMonitorCommand     wp cualli-links
 Model/*                    Objetos de valor (Reference, ReferenceType, CheckResult…)
 ```

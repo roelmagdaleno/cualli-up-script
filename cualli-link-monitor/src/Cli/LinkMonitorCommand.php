@@ -51,6 +51,7 @@ final class LinkMonitorCommand {
 	 */
 	public function scan( array $args, array $assoc_args ): void {
 		$this->apply_email_flags( $assoc_args );
+		$this->print_email_outcome();
 
 		$result = $this->services->scan_runner()->run_now(
 			static function ( string $page_url ): void {
@@ -106,6 +107,25 @@ final class LinkMonitorCommand {
 		if ( \WP_CLI\Utils\get_flag_value( $assoc_args, 'notify-when-clean', false ) ) {
 			add_filter( 'cualli_link_monitor_notify_when_clean', '__return_true' );
 		}
+	}
+
+	/**
+	 * Prints whether Resend accepted the report.
+	 */
+	private function print_email_outcome(): void {
+		add_action(
+			'cualli_link_monitor_report_sent',
+			static function ( string $email_id ): void {
+				\WP_CLI::log( 'Resend aceptó el correo: ' . $email_id );
+			}
+		);
+
+		add_action(
+			'cualli_link_monitor_report_failed',
+			static function ( string $message ): void {
+				\WP_CLI::warning( 'No se pudo enviar el correo. ' . $message );
+			}
+		);
 	}
 
 	/**
